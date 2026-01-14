@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Media Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#0f172a;
+  color:#fff;
+  padding:50px 25px;
+}
+
+/* ===== GRID ===== */
+.grid{
+  max-width:1300px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:30px;
+}
+
+/* ===== CARD ===== */
+.card{
+  position:relative;
+  background:#020617;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 15px 35px rgba(0,0,0,.6);
+}
+
+.card img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  display:block;
+}
+
+/* ===== ZOOM ICON ===== */
+.zoom-btn{
+  position:absolute;
+  bottom:12px;
+  right:12px;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:rgba(0,0,0,.7);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.zoom-btn::before{
+  content:"+";
+  font-size:22px;
+  font-weight:700;
+}
+
+/* ===== PANEL ===== */
+#zoomPanel{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.95);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:999;
+}
+
+#zoomPanel.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* IMAGE */
+#zoomImg{
+  max-width:90%;
+  max-height:90%;
+  transition:transform .25s ease;
+  cursor:zoom-in;
+}
+
+/* CLOSE */
+.close-btn{
+  position:absolute;
+  top:25px;
+  right:30px;
+  background:#ef4444;
+  color:#fff;
+  border:none;
+  padding:10px 18px;
+  font-size:16px;
+  border-radius:10px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1 style="text-align:center;margin-bottom:40px">Social Media Post</h1>
+
+<!-- ===== POSTS ===== -->
+<div class="grid">
+  <!-- 20 POSTS -->
+  <!-- Replace src with your images -->
+  <div class="card"><img src="https://i.postimg.cc/c457wYN3/1.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/cHXtZyxQ/2.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/DfNmcc8k/3.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/kM2W9GSR/4.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/SxfMVzB3/Untitled_design_(2).png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/cLxHxkzQ/1.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/13799mwQ/2.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/3NhhLd5G/3.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/3NhhLd5G/3.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/02fkBdNY/4.png"><div class="zoom-btn" data-zoom></div></div>
+
+  <div class="card"><img src="https://i.postimg.cc/8zX11pMQ/5.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/CL6t5zPm/1.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/SRRdbGhy/2.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/c4j9ZP6N/3.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/25d2Q6wX/4.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/8cYHprpK/5.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/W49SWyBg/1.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/ncY4S579/2.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/mgLQvwNS/3.png"><div class="zoom-btn" data-zoom></div></div>
+  <div class="card"><img src="https://i.postimg.cc/dtm2NXdk/4.png"><div class="zoom-btn" data-zoom></div></div>
+</div>
+
+<!-- ===== ZOOM PANEL ===== -->
+<div id="zoomPanel">
+  <button class="close-btn">Close</button>
+  <img id="zoomImg">
+</div>
+
+<script>
+const panel = document.getElementById("zoomPanel");
+const zoomImg = document.getElementById("zoomImg");
+const closeBtn = document.querySelector(".close-btn");
+
+let scale = 1;
+
+/* OPEN */
+document.addEventListener("click", e=>{
+  const btn = e.target.closest("[data-zoom]");
+  if(!btn) return;
+
+  const img = btn.parentElement.querySelector("img");
+  zoomImg.src = img.src;
+  scale = 1;
+  zoomImg.style.transform = "scale(1)";
+  panel.classList.add("active");
+});
+
+/* CLOSE */
+closeBtn.onclick = ()=>{
+  panel.classList.remove("active");
+  zoomImg.src = "";
+};
+
+/* ZOOM */
+zoomImg.addEventListener("wheel", e=>{
+  e.preventDefault();
+  scale += e.deltaY < 0 ? 0.15 : -0.15;
+  scale = Math.min(Math.max(1, scale), 4);
+  zoomImg.style.transform = `scale(${scale})`;
+});
+
+/* RESET */
+zoomImg.addEventListener("dblclick", ()=>{
+  scale = 1;
+  zoomImg.style.transform = "scale(1)";
+});
+</script>
+
+</body>
+</html>
